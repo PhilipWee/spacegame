@@ -11,11 +11,17 @@ func _move():
 	#----Joystick Movement Code----
 	if joystick_move and joystick_move.is_working:
 		vel += joystick_move.output * speed
-		
+	#----Joystick Movement Code----
+	
+	#----Gravity Handling Code----
+	vel += $"../gravityHandler".get_gravity_field(position)
+	
+	
+	#----Collision Handling Code----
 	var collision = move_and_collide(vel)
 	if collision:
 		vel = Vector2.ZERO
-	#----Joystick Movement Code----
+	#----Collision Handling Code----
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

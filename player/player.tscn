@@ -29,3 +29,6 @@ shape = SubResource( 2 )
 [node name="JoystickMove" parent="UI" instance=ExtResource( 3 )]
 margin_top = 348.0
 margin_bottom = 248.0
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
