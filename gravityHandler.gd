@@ -4,8 +4,11 @@ export (PackedScene) var Planet
 export var G = 100
 
 var planet_data : PoolVector3Array = []
+#Add to the gravity handler group
+
 
 func _ready():
+	$".".add_to_group("gravityHandler")
 	var children = get_parent().get_children()
 	for child in children:
 		if child.get_filename() == Planet.get_path():
