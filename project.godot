@@ -21,7 +21,12 @@ _global_script_class_icons={
 [application]
 
 config/name="NeoNauts"
+run/main_scene="res://map/map.tscn"
 config/icon="res://icon.png"
+
+[display]
+
+window/dpi/allow_hidpi=true
 
 [input_devices]
 

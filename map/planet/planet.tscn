@@ -14,6 +14,7 @@ animations = [ {
 radius = 254.541
 
 [node name="planet" type="RigidBody2D"]
+collision_mask = 3
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 1 )

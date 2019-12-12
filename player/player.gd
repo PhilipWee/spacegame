@@ -7,6 +7,8 @@ enum shoot_state {STATE_UNREADY,STATE_READY}
 onready var joystick_move := $UI/JoystickMove
 onready var joystick_shoot := $UI/JoystickShoot
 
+onready var bullet_scene = preload("res://player/bullet/bullet.tscn")
+
 
 var vel = Vector2.ZERO
 var current_shoot_state
@@ -29,6 +31,7 @@ func _move():
 	if collision:
 		vel = Vector2.ZERO
 
+
 func _shoot():
 	
 	#----Shooting handling Code----
@@ -37,13 +40,20 @@ func _shoot():
 	
 	if current_shoot_state == shoot_state.STATE_READY and not joystick_shoot.is_working:
 		current_shoot_state = shoot_state.STATE_UNREADY
-		print('pew')
+		_create_bullet(position,last_shoot_output)
 	
 	if joystick_shoot.output == Vector2.ZERO:
 		current_shoot_state = shoot_state.STATE_UNREADY
+	
+	last_shoot_output = joystick_shoot.output
 
+func _create_bullet(bullet_pos:Vector2,bullet_vel:Vector2):
+	var bullet = bullet_scene.instance()
+	get_parent().get_node("holders").get_node("bullets").add_child(bullet)
+	bullet.create(bullet_pos,bullet_vel,vel)
+	
+	
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
 
