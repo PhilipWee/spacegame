@@ -1,6 +1,8 @@
 extends KinematicBody2D
 
-export var speed = 2
+export var SPEED = 2
+export var CAMERA_ZOOM = Vector2(3,3)
+export var CAMERA_SMOOTHING = 200
 
 enum shoot_state {STATE_UNREADY,STATE_READY}
 
@@ -12,34 +14,63 @@ onready var bullet_scene = preload("res://player/bullet/bullet.tscn")
 signal remove_projectile_line
 
 var vel = Vector2(0,0)
+var cam: Camera2D
+
 var current_shoot_state
 var last_shoot_output
 
 #Make a floatable fuelbar value
 var fuel: float
 var exists = true
+var cam_following = false
 
 onready var fuelbar = $UI/fuelBar
+
+
 
 func _ready():
 	fuel =  fuelbar.value
 	var center = Vector2(2324,1023)
 	var zoom = Vector2(10,10)
+	_initialise_camera()
 	show_level_camera(center,zoom)
 
 func show_level_camera(center:Vector2,zoom:Vector2):
-	$Camera2D.position = center
-	$Camera2D.zoom = zoom
-	
+	cam.set_enable_follow_smoothing(CAMERA_SMOOTHING)
+	cam.position = center
+	cam.zoom = zoom
+	start_zoom_timer(1)
+
+func start_zoom_timer(time):
+	var timer = Timer.new()
+	add_child(timer)
+	timer.wait_time = time
+	timer.one_shot = true
+	timer.connect("timeout", self, "_zoom",[CAMERA_ZOOM])
+	timer.start()
+
+func _zoom(zoom_amt):
+	cam.position = position
+	cam.zoom = zoom_amt
+	cam_following = true
+
+func _initialise_camera():
+	cam = Camera2D.new()
+	cam.make_current()
+	get_parent().call_deferred("add_child",cam)
+
+func _handle_cam():
+	if cam_following:
+		cam.position = position
 
 func _move():
 	_generate_line()
+	_handle_cam()
 	#----Joystick Movement Code----
 	if joystick_move and joystick_move.is_working and fuel > 0:
 		fuel -= joystick_move.output.length()
-		print(fuel)
 		fuelbar.value = fuel
-		vel += Vector2(joystick_move.output.x*abs(joystick_move.output.x),joystick_move.output.y*abs(joystick_move.output.y)) * speed
+		vel += Vector2(joystick_move.output.x*abs(joystick_move.output.x),joystick_move.output.y*abs(joystick_move.output.y)) * SPEED
 
 	
 	#----Gravity Handling Code----

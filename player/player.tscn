@@ -97,10 +97,6 @@ margin_top = -245.781
 margin_right = -114.349
 margin_bottom = -143.781
 
-[node name="Camera2D" type="Camera2D" parent="."]
-current = true
-zoom = Vector2( 3, 3 )
-
 [node name="projectile_line" type="Line2D" parent="."]
 [connection signal="pressed" from="UI/HBoxContainer/restartButton" to="." method="_on_restartButton_pressed"]
 [connection signal="pressed" from="UI/HBoxContainer/menuButton" to="." method="_on_menuButton_pressed"]
