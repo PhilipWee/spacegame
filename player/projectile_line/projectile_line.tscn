@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://projectile_line.gd" type="Script" id=1]
+
+[node name="projectile_line" type="Line2D"]
+texture_mode = -1078984704
+script = ExtResource( 1 )

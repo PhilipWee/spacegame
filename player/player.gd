@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-export var speed = 1
+export var speed = 2
 
 enum shoot_state {STATE_UNREADY,STATE_READY}
 
@@ -9,17 +9,38 @@ onready var joystick_shoot := $UI/JoystickShoot
 
 onready var bullet_scene = preload("res://player/bullet/bullet.tscn")
 
+signal remove_projectile_line
 
-var vel = Vector2.ZERO
+var vel = Vector2(0,0)
 var current_shoot_state
 var last_shoot_output
 
+#Make a floatable fuelbar value
+var fuel: float
+var exists = true
+
+onready var fuelbar = $UI/fuelBar
+
+func _ready():
+	fuel =  fuelbar.value
+	var center = Vector2(2324,1023)
+	var zoom = Vector2(10,10)
+	show_level_camera(center,zoom)
+
+func show_level_camera(center:Vector2,zoom:Vector2):
+	$Camera2D.position = center
+	$Camera2D.zoom = zoom
+	
+
 func _move():
-	
+	_generate_line()
 	#----Joystick Movement Code----
-	if joystick_move and joystick_move.is_working:
-		vel += joystick_move.output * speed
-	
+	if joystick_move and joystick_move.is_working and fuel > 0:
+		fuel -= joystick_move.output.length()
+		print(fuel)
+		fuelbar.value = fuel
+		vel += Vector2(joystick_move.output.x*abs(joystick_move.output.x),joystick_move.output.y*abs(joystick_move.output.y)) * speed
+
 	
 	#----Gravity Handling Code----
 	if  $"../gravityHandler":
@@ -29,8 +50,34 @@ func _move():
 	#----Collision Handling Code----
 	var collision = move_and_collide(vel)
 	if collision:
-		vel = Vector2.ZERO
+		if collision.collider_shape.name == 'NoLandZone':
+			#Run Kill Code
+			_die()
+		elif collision.collider_shape.name == "LandZone":
+			vel = Vector2.ZERO
+		elif collision.collider_shape.name == 'EndZone':
+			#Run win code
+			_win()
+		elif collision.collider_shape.name == 'StartZone':
+			vel = Vector2.ZERO
+			
+func _die():
+	
+	var death_scene = preload("res://player/death_scene/DeathOverlay.tscn").instance()
+	add_child(death_scene)
+	_remove()
 
+func _win():
+	var win_scene = preload("res://player/win_scene/WinOverlay.tscn").instance()
+	win_scene.init("res://map/map.tscn","res://menu/menu.tscn")
+	add_child(win_scene)
+	_remove()
+
+func _remove():
+	exists = false
+	self.get_node("AnimatedSprite").queue_free()
+	self.get_node("CollisionShape2D").queue_free()
+	self.get_node("projectile_line").queue_free()
 
 func _shoot():
 	
@@ -51,16 +98,32 @@ func _create_bullet(bullet_pos:Vector2,bullet_vel:Vector2):
 	var bullet = bullet_scene.instance()
 	get_parent().get_node("holders").get_node("bullets").add_child(bullet)
 	bullet.create(bullet_pos,bullet_vel,vel)
-	
-	
 
-func _ready():
-	pass # Replace with function body.
+func _generate_line():
+	var points: PoolVector2Array = []
+	var current_vel = vel
+	var space_state = get_world_2d().get_direct_space_state()
+	points.append(position)
+	for i in range(1,200):
+		points.append(points[-1] + (current_vel))
+		current_vel += $"../gravityHandler".get_gravity_field(points[i])
+		if space_state.intersect_point(points[-1],1,[],524288).size() > 0:
+			break
+	for i in range(points.size()):
+		points[i] = points[i] - position
+	self.get_node('projectile_line').points = points
+
+
 
 func _physics_process(delta):
-	_move()
-	_shoot()
+	if exists:
+		_move()
+		_shoot()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _on_restartButton_pressed():
+	get_tree().reload_current_scene()
+
+
+func _on_menuButton_pressed():
+	get_tree().change_scene("res://menu/menu.tscn")
+	pass # Replace with function body.

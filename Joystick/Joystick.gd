@@ -31,7 +31,7 @@ export(int, 0, 12) var directions := 0
 export(int, -180, 180) var simmetry_angle := 90
 
 #If the handle is inside this range, in proportion to the background size, the output is zero.
-export(float, 0, 0.5) var dead_zone := 0.2;
+export(float, 0, 0.5) var dead_zone := 0.01;
 
 #The max distance the handle can reach, in proportion to the background size.
 export(float, 0.5, 2) var clamp_zone := 1;
