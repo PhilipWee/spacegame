@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://icon.png" type="Texture" id=2]
@@ -7,6 +7,12 @@
 [ext_resource path="res://Joystick/Joystick.tscn" type="PackedScene" id=5]
 [ext_resource path="res://player/ui/bg.png" type="Texture" id=6]
 [ext_resource path="res://player/ui/fill.png" type="Texture" id=7]
+[ext_resource path="res://player/player_assets/endpoint_marker.png" type="Texture" id=8]
+[ext_resource path="res://player/player_assets/player_marker.png" type="Texture" id=9]
+[ext_resource path="res://player/player_assets/speed_arrow.png" type="Texture" id=10]
+[ext_resource path="res://player/speedText.gd" type="Script" id=11]
+[ext_resource path="res://player/player_assets/eye_icon.png" type="Texture" id=12]
+[ext_resource path="res://player/player_assets/flame.svg" type="Texture" id=13]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -19,8 +25,17 @@ animations = [ {
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 31.7724, 32.0207 )
 
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ ExtResource( 13 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
 [node name="player" type="KinematicBody2D"]
 script = ExtResource( 1 )
+ZOOM_FACTOR = 0.5
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 1 )
@@ -31,7 +46,7 @@ shape = SubResource( 2 )
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI"]
-margin_right = 1024.0
+anchor_right = 1.0
 margin_bottom = 53.0
 alignment = 2
 
@@ -61,7 +76,8 @@ anchor_bottom = 1.0
 margin_left = -198.0
 margin_top = -53.0
 margin_right = 198.0
-value = 100.0
+max_value = 1000.0
+value = 1000.0
 texture_under = ExtResource( 6 )
 texture_progress = ExtResource( 7 )
 
@@ -71,12 +87,11 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -145.263
-margin_top = -123.053
+margin_top = -246.696
 margin_right = -45.2632
-margin_bottom = -21.0526
+margin_bottom = -144.695
 
 [node name="Joystick2" parent="UI" instance=ExtResource( 5 )]
-visible = false
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -87,16 +102,88 @@ margin_right = -183.158
 margin_bottom = -20.7767
 
 [node name="Joystick3" parent="UI" instance=ExtResource( 5 )]
-visible = false
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -214.349
+margin_left = -282.939
 margin_top = -245.781
-margin_right = -114.349
+margin_right = -182.939
 margin_bottom = -143.781
 
-[node name="projectile_line" type="Line2D" parent="."]
+[node name="endpointMarker" type="TextureRect" parent="UI"]
+anchor_left = 0.5
+anchor_top = 0.08
+anchor_right = 0.5
+anchor_bottom = 0.08
+margin_left = -23.0
+rect_pivot_offset = Vector2( 23, 0 )
+texture = ExtResource( 8 )
+
+[node name="playerMarker" type="TextureRect" parent="UI"]
+margin_left = -103.003
+margin_top = -192.404
+margin_right = 300.997
+margin_bottom = 96.5961
+rect_scale = Vector2( 0.5, 0.5 )
+rect_pivot_offset = Vector2( 99.83, 189.87 )
+texture = ExtResource( 9 )
+
+[node name="levelText" type="Label" parent="UI"]
+anchor_left = 0.5
+anchor_top = 0.3
+anchor_right = 0.5
+anchor_bottom = 0.3
+grow_horizontal = 2
+text = "rwewfew"
+
+[node name="speedMarker" type="TextureRect" parent="UI"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -116.434
+margin_top = -275.424
+margin_right = 121.566
+margin_bottom = 276.576
+rect_scale = Vector2( 0.5, 0.5 )
+rect_pivot_offset = Vector2( 116.7, 275.87 )
+texture = ExtResource( 10 )
+
+[node name="speedText" type="Label" parent="UI/speedMarker"]
+margin_left = 69.0
+margin_top = 191.0
+margin_right = 69.0
+margin_bottom = 123.0
+grow_horizontal = 0
+grow_vertical = 0
+rect_rotation = -90.0
+rect_scale = Vector2( 3, 3 )
+rect_pivot_offset = Vector2( 0, 7 )
+script = ExtResource( 11 )
+
+[node name="ViewLevelBtn" type="TextureButton" parent="UI"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -130.872
+margin_top = -106.062
+margin_right = 635.128
+margin_bottom = 659.938
+rect_scale = Vector2( 0.1, 0.1 )
+texture_normal = ExtResource( 12 )
+
+[node name="rocketFire" type="AnimatedSprite" parent="."]
+position = Vector2( -21.9941, 31.4219 )
+scale = Vector2( 0.085, 0.085 )
+frames = SubResource( 3 )
+centered = false
+flip_v = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
 [connection signal="pressed" from="UI/HBoxContainer/restartButton" to="." method="_on_restartButton_pressed"]
 [connection signal="pressed" from="UI/HBoxContainer/menuButton" to="." method="_on_menuButton_pressed"]
+[connection signal="button_down" from="UI/ViewLevelBtn" to="." method="_on_ViewLevelBtn_button_down"]
+[connection signal="button_up" from="UI/ViewLevelBtn" to="." method="_on_ViewLevelBtn_button_up"]

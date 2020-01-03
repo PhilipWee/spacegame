@@ -1,13 +1,17 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://menu/LevelSelectButton.gd" type="Script" id=1]
 [ext_resource path="res://menu/assets/levelSelectButton.png" type="Texture" id=2]
+[ext_resource path="res://menu/assets/stars_cover.png" type="Texture" id=3]
+[ext_resource path="res://menu/assets/stars_fill.png" type="Texture" id=4]
+[ext_resource path="res://menu/assets/lock.png" type="Texture" id=5]
 
 [node name="LevelSelectButton" type="Control"]
 anchor_right = 0.065
 anchor_bottom = 0.111
+margin_left = -0.323517
 margin_top = -0.513351
-margin_right = 957.44
+margin_right = 957.117
 margin_bottom = 532.887
 script = ExtResource( 1 )
 
@@ -26,4 +30,21 @@ rect_scale = Vector2( 4, 4 )
 text = "1"
 align = 1
 valign = 1
+
+[node name="TextureProgress" type="TextureProgress" parent="."]
+margin_left = 12.0
+margin_top = 63.362
+margin_right = 860.0
+margin_bottom = 430.362
+rect_scale = Vector2( 0.05, 0.05 )
+texture_over = ExtResource( 3 )
+texture_progress = ExtResource( 4 )
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+margin_left = 17.9792
+margin_top = 7.94429
+margin_right = 311.979
+margin_bottom = 496.944
+rect_scale = Vector2( 0.1, 0.1 )
+texture = ExtResource( 5 )
 [connection signal="pressed" from="TextureRect" to="." method="_on_TextureRect_pressed"]

@@ -24,6 +24,10 @@ config/name="NeoNauts"
 run/main_scene="res://menu/menu.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+saveData="*res://saveData/saveData.tscn"
+
 [display]
 
 window/dpi/allow_hidpi=true

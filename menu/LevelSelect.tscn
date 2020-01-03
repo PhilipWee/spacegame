@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=2 format=2]
 
 [ext_resource path="res://menu/LevelSelect.gd" type="Script" id=1]
-[ext_resource path="res://menu/LevelSelectButton.tscn" type="PackedScene" id=2]
 
 [node name="LevelSelect" type="Control"]
 anchor_right = 1.0
@@ -19,29 +18,3 @@ margin_bottom = 600.0
 custom_constants/vseparation = 80
 custom_constants/hseparation = 79
 columns = 10
-
-[node name="LevelSelectButton" parent="MarginContainer/GridContainer" instance=ExtResource( 2 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 0.0
-margin_right = 0.0
-margin_bottom = 0.0
-level_number = 1
-
-[node name="LevelSelectButton2" parent="MarginContainer/GridContainer" instance=ExtResource( 2 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 79.0
-margin_top = 0.0
-margin_right = 79.0
-margin_bottom = 0.0
-level_number = 2
-
-[node name="LevelSelectButton3" parent="MarginContainer/GridContainer" instance=ExtResource( 2 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 158.0
-margin_top = 0.0
-margin_right = 158.0
-margin_bottom = 0.0
-level_number = 3

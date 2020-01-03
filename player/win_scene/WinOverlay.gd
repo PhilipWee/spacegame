@@ -8,8 +8,6 @@ func _ready():
 	pass # Replace with function body.
 
 func init(level_to_load,main_menu_scene):
-	print(level_to_load)
-	print(main_menu_scene)
 	level_path = level_to_load
 	main_menu_path = main_menu_scene
 
