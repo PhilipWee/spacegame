@@ -1,7 +1,7 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
-[ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://player/player_assets/spaceshuttle.png" type="Texture" id=2]
 [ext_resource path="res://menu/assets/restartButton.png" type="Texture" id=3]
 [ext_resource path="res://menu/assets/menu.png" type="Texture" id=4]
 [ext_resource path="res://Joystick/Joystick.tscn" type="PackedScene" id=5]
@@ -9,10 +9,11 @@
 [ext_resource path="res://player/ui/fill.png" type="Texture" id=7]
 [ext_resource path="res://player/player_assets/endpoint_marker.png" type="Texture" id=8]
 [ext_resource path="res://player/player_assets/player_marker.png" type="Texture" id=9]
-[ext_resource path="res://player/player_assets/speed_arrow.png" type="Texture" id=10]
-[ext_resource path="res://player/speedText.gd" type="Script" id=11]
-[ext_resource path="res://player/player_assets/eye_icon.png" type="Texture" id=12]
-[ext_resource path="res://player/player_assets/flame.svg" type="Texture" id=13]
+[ext_resource path="res://Bebas-Regular.ttf" type="DynamicFontData" id=10]
+[ext_resource path="res://player/player_assets/speed_arrow.png" type="Texture" id=11]
+[ext_resource path="res://player/speedText.gd" type="Script" id=12]
+[ext_resource path="res://player/player_assets/eye_icon.png" type="Texture" id=13]
+[ext_resource path="res://player/player_assets/flame.svg" type="Texture" id=14]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -22,12 +23,17 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 31.7724, 32.0207 )
+[sub_resource type="DynamicFont" id=2]
+size = 50
+font_data = ExtResource( 10 )
 
-[sub_resource type="SpriteFrames" id=3]
+[sub_resource type="DynamicFont" id=3]
+size = 25
+font_data = ExtResource( 10 )
+
+[sub_resource type="SpriteFrames" id=4]
 animations = [ {
-"frames": [ ExtResource( 13 ) ],
+"frames": [ ExtResource( 14 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
@@ -35,53 +41,59 @@ animations = [ {
 
 [node name="player" type="KinematicBody2D"]
 script = ExtResource( 1 )
-ZOOM_FACTOR = 0.5
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 0.037, 0.037 )
 frames = SubResource( 1 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 2 )
+[node name="player" type="CollisionPolygon2D" parent="."]
+position = Vector2( 0.179207, 1.56584 )
+scale = Vector2( 2.30095, 2.30095 )
+polygon = PoolVector2Array( -18.8164, 35.6936, -19.0004, 32.1971, -20.2886, 30.7249, -21.9449, 9.00984, -20.2886, -8.28863, -16.9762, -16.2018, -15.1359, -17.3059, -10.7193, -12.3372, -10.9033, -24.851, -6.30264, -33.8683, -0.0457382, -38.1009, 4.55492, -35.7085, 8.41946, -29.6357, 11.3639, -24.2989, 11.1799, -12.7053, 14.6764, -17.4899, 17.4368, -15.4656, 19.6451, -11.6011, 21.4853, -1.84771, 21.6694, 6.06542, 21.1173, 23.5479, 19.277, 34.7735 )
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UI"]
+[node name="MarginContainer2" type="MarginContainer" parent="UI"]
+anchor_left = 1.0
 anchor_right = 1.0
-margin_bottom = 53.0
-alignment = 2
+margin_left = -1024.0
+margin_right = -984.0
+margin_bottom = 40.0
 
-[node name="restartButton" type="TextureButton" parent="UI/HBoxContainer"]
-margin_left = 910.0
-margin_right = 965.0
-margin_bottom = 53.0
-texture_normal = ExtResource( 3 )
+[node name="restartButton" type="TouchScreenButton" parent="UI/MarginContainer2"]
+position = Vector2( 849.115, -1.43139 )
+normal = ExtResource( 3 )
 
-[node name="menuButton" type="TextureButton" parent="UI/HBoxContainer"]
-margin_left = 969.0
-margin_right = 1024.0
-margin_bottom = 53.0
-texture_normal = ExtResource( 4 )
+[node name="menuButton" type="TouchScreenButton" parent="UI/MarginContainer2"]
+position = Vector2( 915.8, -1.89999 )
+normal = ExtResource( 4 )
 
 [node name="JoystickMove" parent="UI" instance=ExtResource( 5 )]
-anchor_top = 1.0
+anchor_top = 0.535
+anchor_right = 0.303
 anchor_bottom = 1.0
-margin_top = -251.0
+margin_left = 45.0
+margin_top = -3.05176e-005
+margin_right = -0.272003
 margin_bottom = 0.0
+joystick_mode = 1
 
 [node name="fuelBar" type="TextureProgress" parent="UI"]
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-margin_left = -198.0
-margin_top = -53.0
-margin_right = 198.0
+anchor_left = 0.522
+anchor_top = 0.895
+anchor_right = 0.522
+anchor_bottom = 0.983
+margin_left = -198.429
+margin_top = -0.017395
+margin_right = 197.571
+margin_bottom = 0.182983
 max_value = 1000.0
 value = 1000.0
 texture_under = ExtResource( 6 )
 texture_progress = ExtResource( 7 )
 
 [node name="JoystickShoot" parent="UI" instance=ExtResource( 5 )]
+visible = false
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -92,6 +104,7 @@ margin_right = -45.2632
 margin_bottom = -144.695
 
 [node name="Joystick2" parent="UI" instance=ExtResource( 5 )]
+visible = false
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -102,6 +115,7 @@ margin_right = -183.158
 margin_bottom = -20.7767
 
 [node name="Joystick3" parent="UI" instance=ExtResource( 5 )]
+visible = false
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -116,8 +130,11 @@ anchor_left = 0.5
 anchor_top = 0.08
 anchor_right = 0.5
 anchor_bottom = 0.08
-margin_left = -23.0
-rect_pivot_offset = Vector2( 23, 0 )
+margin_left = -41.0
+margin_right = 3540.52
+margin_bottom = 5433.0
+rect_scale = Vector2( 0.01, 0.01 )
+rect_pivot_offset = Vector2( 22.76, 0 )
 texture = ExtResource( 8 )
 
 [node name="playerMarker" type="TextureRect" parent="UI"]
@@ -135,7 +152,19 @@ anchor_top = 0.3
 anchor_right = 0.5
 anchor_bottom = 0.3
 grow_horizontal = 2
+custom_fonts/font = SubResource( 2 )
 text = "rwewfew"
+
+[node name="informationText" type="Label" parent="UI"]
+anchor_left = 0.5
+anchor_top = 0.02
+anchor_right = 0.5
+anchor_bottom = 0.02
+margin_left = 2.0
+margin_right = 2.0
+margin_bottom = 30.0
+grow_horizontal = 2
+custom_fonts/font = SubResource( 3 )
 
 [node name="speedMarker" type="TextureRect" parent="UI"]
 visible = false
@@ -149,7 +178,7 @@ margin_right = 121.566
 margin_bottom = 276.576
 rect_scale = Vector2( 0.5, 0.5 )
 rect_pivot_offset = Vector2( 116.7, 275.87 )
-texture = ExtResource( 10 )
+texture = ExtResource( 11 )
 
 [node name="speedText" type="Label" parent="UI/speedMarker"]
 margin_left = 69.0
@@ -161,29 +190,32 @@ grow_vertical = 0
 rect_rotation = -90.0
 rect_scale = Vector2( 3, 3 )
 rect_pivot_offset = Vector2( 0, 7 )
-script = ExtResource( 11 )
+script = ExtResource( 12 )
 
-[node name="ViewLevelBtn" type="TextureButton" parent="UI"]
+[node name="MarginContainer" type="MarginContainer" parent="UI"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -130.872
-margin_top = -106.062
-margin_right = 635.128
-margin_bottom = 659.938
-rect_scale = Vector2( 0.1, 0.1 )
-texture_normal = ExtResource( 12 )
+margin_left = -1024.0
+margin_top = -600.0
+margin_right = -984.0
+margin_bottom = -560.0
+
+[node name="ViewLevelBtn" type="TouchScreenButton" parent="UI/MarginContainer"]
+position = Vector2( 814.244, 396.289 )
+scale = Vector2( 0.236894, 0.236894 )
+normal = ExtResource( 13 )
 
 [node name="rocketFire" type="AnimatedSprite" parent="."]
-position = Vector2( -21.9941, 31.4219 )
+position = Vector2( -21.1997, 79.8821 )
 scale = Vector2( 0.085, 0.085 )
-frames = SubResource( 3 )
+frames = SubResource( 4 )
 centered = false
 flip_v = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
-[connection signal="pressed" from="UI/HBoxContainer/restartButton" to="." method="_on_restartButton_pressed"]
-[connection signal="pressed" from="UI/HBoxContainer/menuButton" to="." method="_on_menuButton_pressed"]
-[connection signal="button_down" from="UI/ViewLevelBtn" to="." method="_on_ViewLevelBtn_button_down"]
-[connection signal="button_up" from="UI/ViewLevelBtn" to="." method="_on_ViewLevelBtn_button_up"]
+[connection signal="pressed" from="UI/MarginContainer2/restartButton" to="." method="_on_restartButton_pressed"]
+[connection signal="pressed" from="UI/MarginContainer2/menuButton" to="." method="_on_menuButton_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/ViewLevelBtn" to="." method="_on_ViewLevelBtn_pressed"]
+[connection signal="released" from="UI/MarginContainer/ViewLevelBtn" to="." method="_on_ViewLevelBtn_released"]

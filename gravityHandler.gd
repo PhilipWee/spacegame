@@ -25,5 +25,5 @@ func get_orbit_velocity(location : Vector2):
 	var magnitude:float = 0
 	var direction = get_gravity_field(location).normalized().rotated(PI/2)
 	for planet in planet_data:
-		magnitude += sqrt(G * planet.z / location.distance_to(Vector2(planet.x,planet.y))) *0.25
+		magnitude += sqrt(G * planet.z / location.distance_to(Vector2(planet.x,planet.y))) * 0.43
 	return direction * magnitude

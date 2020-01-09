@@ -1,46 +1,24 @@
 extends "res://objects/object.gd"
-export var SHOW_GUIDING_LINE = true
-export var PREDICTION_DISTANCE = 1000
-
-var done = false
-
-var projectile_line
-
-#TODO: Fix getting into orbit
-#TODO: Show Guidance Line
-#TODO: Refactor to make player, asteroids inheirt from same object.gd base
+export var TIME_TO_COLLISION:float = 60
+export var INITIAL_VELOCITY = 5
+export var OBJECTIVE_NUMBER = 0
 
 func _ready():
-	linear_velocity = Vector2(100,0)
-	_initialise_projectile_line()
-	pass
+	vel = Vector2.LEFT * INITIAL_VELOCITY
+	_start_doomsday_timer(TIME_TO_COLLISION)
 	
-func _initialise_projectile_line():
-	projectile_line = Line2D.new()
-	get_parent().call_deferred("add_child",projectile_line)
-	
+
 func _physics_process(delta):
-#	if not done:
-#		print('hi')
-#		if $"../gravityHandler":
-#			done = true
-#			vel = $"../gravityHandler".get_orbit_velocity(position)
-		
-	_generate_line()
+	if collision:
+		if collision.collider.name == "planet":
+			get_parent().get_node("player").die("Asteroid Hit Earth")
+	#Constantly reupdate the endpoint to the location of the asteroid
+	get_parent().get_node("player").ENDPOINT_LOCATION = position
 
-func _generate_line():
-	print(vel)
-	if SHOW_GUIDING_LINE:
-		var points: PoolVector2Array = []
-		var current_vel = vel
-		var space_state = get_world_2d().get_direct_space_state()
-		points.append(position)
-		for i in range(1,PREDICTION_DISTANCE):
-			points.append(points[-1] + (current_vel))
-			current_vel += $"../gravityHandler".get_gravity_field(points[i])
-			if space_state.intersect_point(points[-1],1,[],524288).size() > 0:
-				break
-		projectile_line.points = points
-
-func _on_object2_body_entered(body):
-	pass
+func _start_doomsday_timer(time):
+	var timer = Timer.new()
+	add_child(timer)
+	timer.wait_time = time
+	timer.one_shot = true
+	timer.connect("timeout", get_parent().get_node('player'), "objective_completed", [0])
+	timer.start()

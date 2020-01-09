@@ -13,7 +13,7 @@ export var LEVEL_NAME = "Insert Level Name"
 export var LEVEL_TEXT_FADE_TIME = 3
 export var LEVEL_ZOOM_FADE_TIME = 2
 export var PREDICTION_DISTANCE = 200
-export var SHOW_SPEED_ARROW = true
+export var SHOW_SPEED_ARROW = false
 export var NEXT_LEVEL_STRING: String
 export var SHOW_PLAYER_MARKER_AT_ZOOM = 30
 export var MAX_DISTANCE_FROM_ENDPOINT = 10000
@@ -21,7 +21,9 @@ export var MAX_LANDING_SPEED = 20
 export var MUST_LAND_SAFELY = false
 export var STAR_3_FUEL:float
 export var STAR_2_FUEL:float
-export var ZOOM_OFFSET:float = 10
+export var ZOOM_OFFSET:float = 2
+export var NUMBER_OF_OBJECTIVES = 0
+export var MAX_ZOOM = 3
 
 enum shoot_state {STATE_UNREADY,STATE_READY}
 
@@ -34,6 +36,7 @@ onready var level_text = $UI/levelText
 onready var speed_marker = $UI/speedMarker
 onready var speed_text = $UI/speedMarker/speedText
 onready var playArea = $"../playArea"
+onready var collision_shape = $player
 
 onready var bullet_scene = preload("res://player/bullet/bullet.tscn")
 
@@ -42,8 +45,10 @@ onready var player_pos = self.get_global_transform_with_canvas()
 
 var vel = Vector2(0,0)
 var cam: Camera2D
+var level_cam: Camera2D
 var projectile_line = Line2D
 
+var objectives = []
 var current_shoot_state
 var last_shoot_output
 var endpoint_node
@@ -60,6 +65,16 @@ var show_level_cam = false
 #For the show level camera
 var camera_rect : = Rect2()
 var viewport_rect : = Rect2()
+
+func objective_completed(objective_number, complete = true):
+	if complete:
+		objectives[objective_number] = true
+	else:
+		objectives[objective_number] = false
+
+func _initialise_objectives():
+	for i in range(NUMBER_OF_OBJECTIVES):
+		objectives.append(false)
 
 func _rotate_endpoint_marker():
 	endpoint_marker.rect_rotation = position.angle_to_point(ENDPOINT_LOCATION) * 180 / PI - 90
@@ -87,6 +102,7 @@ func _ready():
 	_show_starting_text()
 	show_level_camera()
 	start_zoom_timer()
+	_initialise_objectives()
 	
 	set_process(get_child_count() > 0)
 	
@@ -160,10 +176,11 @@ func calculate_zoom(rect: Rect2, viewport_size: Vector2) -> Vector2:
 
 func show_level_camera():
 	#TODO: Update to continuously show whole screen
-	cam.set_enable_follow_smoothing(CAMERA_SMOOTHING)
+	level_cam.make_current()
+	level_cam.set_enable_follow_smoothing(CAMERA_SMOOTHING)
 	camera_rect = Rect2(position, Vector2()).expand(ENDPOINT_LOCATION)
-	cam.position = calculate_center(camera_rect) - position
-	cam.zoom = calculate_zoom(camera_rect,viewport_rect.size)
+	level_cam.position = calculate_center(camera_rect)
+	level_cam.zoom = calculate_zoom(camera_rect,viewport_rect.size)
 	cam_following = false
 	
 
@@ -176,6 +193,7 @@ func start_zoom_timer():
 	timer.start()
 	
 func _smooth_zoom_to(zoom_amt):
+	cam.make_current()
 	var amt_to_add = (zoom_amt - cam.zoom.x)/20
 	cam.zoom += Vector2(amt_to_add,amt_to_add)
 
@@ -186,9 +204,11 @@ func _zoom_to_character():
 	cam_following = true
 
 func _initialise_camera():
+	level_cam = Camera2D.new()
 	cam = Camera2D.new()
 	cam.make_current()
 	self.add_child(cam)
+	get_parent().call_deferred("add_child",level_cam)
 
 func _initialise_projectile_line():
 	projectile_line = Line2D.new()
@@ -231,7 +251,7 @@ func _handle_cam():
 		_smooth_pan_to(Vector2.ZERO)
 		var zoom_level = vel.length()*ZOOM_FACTOR + 1
 		#Zoom to the character depending on the speed
-		zoom_level = clamp(zoom_level,1.5,5)
+		zoom_level = clamp(zoom_level,1.5,MAX_ZOOM)
 		_smooth_zoom_to(zoom_level)
 
 
@@ -295,6 +315,7 @@ func _move():
 		show_level_camera()
 	else:
 		_handle_cam()
+#	show_level_camera()
 	
 	#----Additional checks for events code----
 	_check_if_out_of_bounds()
@@ -310,7 +331,7 @@ func _check_landing_speed(speed_before_crash):
 		return "survive"
 
 func die(reason:String):
-	if not level_completed:
+	if not level_completed and exists:
 		var death_scene = preload("res://player/death_scene/DeathOverlay.tscn").instance()
 		death_scene.init(reason)
 		add_child(death_scene)
@@ -321,9 +342,14 @@ func _win(speed_before_landing):
 		if _check_landing_speed(speed_before_landing) == "dead":
 			die("Collided too fast")
 			return
+	#Double check that all the objectives are completed
+	if objectives != []:
+		for objective in objectives:
+			if objective == false:
+				return
 	#Load whether you have won or not
 	var win_scene = preload("res://player/win_scene/WinOverlay.tscn").instance()
-	win_scene.init(NEXT_LEVEL_STRING,"res://menu/menu.tscn")
+	win_scene.init(NEXT_LEVEL_STRING,"res://menu/menu.tscn","Fuel Used: " + String(STARTING_FUEL - fuel))
 	add_child(win_scene)
 	joystick_enabled = false
 	level_completed = true
@@ -338,11 +364,12 @@ func _win(speed_before_landing):
 	saveData.level_data[saveData.current_level - 1 + 1]["unlocked"] = true
 
 func _remove():
-	exists = false
-	$"AnimatedSprite".queue_free()
-	$"CollisionShape2D".queue_free()
-	$"rocketFire".queue_free()
-	projectile_line.queue_free()
+	if exists:
+		exists = false
+		$"AnimatedSprite".queue_free()
+		collision_shape.queue_free()
+		$"rocketFire".queue_free()
+		projectile_line.queue_free()
 	
 
 func _shoot():
@@ -394,16 +421,15 @@ func _on_menuButton_pressed():
 	pass # Replace with function body.
 
 
-func _on_ViewLevelBtn_button_down():
+
+
+
+func _on_ViewLevelBtn_pressed():
 	show_level_cam = true
 	show_level_camera()
+	pass # Replace with function body.
 
 
-func _on_ViewLevelBtn_button_up():
+func _on_ViewLevelBtn_released():
 	show_level_cam = false
 	_zoom_to_character()
-
-#Use this to debug the show level camera
-#func _draw() -> void:
-#	draw_rect(camera_rect, Color("#ffffff"), false)
-#	draw_circle(calculate_center(camera_rect), 5, Color("#ffffff"))

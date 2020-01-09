@@ -1,14 +1,21 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://map/gravityHandler.tscn" type="PackedScene" id=1]
 [ext_resource path="res://map/planet/planet.tscn" type="PackedScene" id=2]
-[ext_resource path="res://map/planet/circle.png" type="Texture" id=3]
+[ext_resource path="res://map/map_assets/earth.png" type="Texture" id=3]
 [ext_resource path="res://menu/assets/launchTower.png" type="Texture" id=4]
 [ext_resource path="res://menu/assets/flag.png" type="Texture" id=5]
-[ext_resource path="res://player/player.tscn" type="PackedScene" id=6]
-[ext_resource path="res://objects/object.tscn" type="PackedScene" id=7]
-[ext_resource path="res://objects/asteroidhiteart.gd" type="Script" id=8]
-[ext_resource path="res://map/map_assets/asteroid1.png" type="Texture" id=9]
+[ext_resource path="res://map/map_assets/orbitzone.png" type="Texture" id=6]
+[ext_resource path="res://player/player.tscn" type="PackedScene" id=7]
+[ext_resource path="res://objects/object.tscn" type="PackedScene" id=8]
+[ext_resource path="res://objects/spacestation.gd" type="Script" id=9]
+[ext_resource path="res://map/map_assets/spacestation.png" type="Texture" id=10]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 4064.21
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 4954.93
 
 [node name="lvl1" type="Node2D"]
 __meta__ = {
@@ -26,7 +33,7 @@ position = Vector2( -1590.17, -1584.45 )
 polygon = PoolVector2Array( 1350.38, 3164.29, 1274.48, 3395.77, 1043.24, 3336.95, 872.599, 3273.79, 749.784, 3213.27, 632.179, 3151.24, 632.179, 3151.24, 532.668, 3082.74, 417.648, 2992.28, 328.476, 2913.44, 226.38, 2807.47, 134.622, 2700.2, 60.5104, 2605.65, -7.01514, 2489.02, -69.6298, 2373.61, -128.561, 2243.47, -170.914, 2126.63, -197.086, 2019.23, -228.674, 1881.15, -249.409, 1728.48, -256.268, 1557.86, -251.124, 1451.55, -229.586, 1263.82, -181.586, 1065.82, -130.586, 927.825, -43.4144, 722.905, 74.0372, 535.648, 214.757, 359.47, 398.149, 177.587, 551.37, 65.8931, 694.567, -27.1852, 817.445, -88.7327, 953.482, -148.876, 1060.88, -181.811, 1196.92, -211.882, 1374.48, -244.818, 1444.65, 57.3286, 1762.55, 34.417, 1802.84, -246.265, 1977.94, -213.59, 2142.24, -172.891, 2288.45, -115.612, 2430.14, -46.2748, 2579.37, 44.1656, 2705.98, 136.113, 2831.11, 244.057, 2941.87, 354.817, 3043.84, 474.367, 3140.53, 616.772, 3228.44, 775, 3309.31, 957.841, 3351.5, 1094.97, 3383.38, 1237.92, 3418.24, 1428.63, 3418.24, 1627.53, 3405.94, 1799.77, 3376.5, 1971.47, 3341.96, 2109.61, 3187.88, 2470.67, 3075.5, 2640.29, 2976.58, 2768.31, 2847.6, 2905.29, 2728.92, 3009.15, 2558.75, 3127.89, 2394.93, 3225, 2206.35, 3309.06, 1866.47, 3403.36, 1809.55, 3171.88 )
 
 [node name="Sprite4" type="Sprite" parent="planet"]
-scale = Vector2( 7.1669, 7.1669 )
+scale = Vector2( 0.74305, 0.743049 )
 texture = ExtResource( 3 )
 
 [node name="StartZone" type="CollisionPolygon2D" parent="planet"]
@@ -56,26 +63,47 @@ texture = ExtResource( 5 )
 offset = Vector2( 2322.4, -207.664 )
 flip_h = true
 
-[node name="player" parent="." instance=ExtResource( 6 )]
+[node name="Sprite2" type="Sprite" parent="planet"]
+scale = Vector2( 8.14487, 8.14487 )
+texture = ExtResource( 6 )
+
+[node name="player" parent="." instance=ExtResource( 7 )]
 position = Vector2( 2309.52, 3138.98 )
 STARTING_FUEL = 1000
 STARTING_CAM_CENTER = Vector2( 2582, 1804 )
 ENDPOINT_LOCATION = Vector2( 2915, 385 )
 LEVEL_NAME = "Moon Delivery"
 PREDICTION_DISTANCE = 1000
-SHOW_SPEED_ARROW = false
 NEXT_LEVEL_STRING = "res://map/levels/lvl2.tscn"
+NUMBER_OF_OBJECTIVES = 1
 
-[node name="object2" parent="." instance=ExtResource( 7 )]
+[node name="object2" parent="." instance=ExtResource( 8 )]
 position = Vector2( 6984.83, 4588.08 )
-linear_velocity = Vector2( -13.99, -0.07 )
-script = ExtResource( 8 )
+rotation = -0.471239
+script = ExtResource( 9 )
 
 [node name="Sprite" type="Sprite" parent="object2"]
-texture = ExtResource( 9 )
+scale = Vector2( 0.312839, 0.312839 )
+texture = ExtResource( 10 )
 
-[node name="LandZone" type="CollisionPolygon2D" parent="object2"]
-polygon = PoolVector2Array( -243.48, 108.821, -240.465, -26.8401, -282.67, -123.31, -275.134, -167.023, -240.465, -180.589, -202.781, -194.155, -184.693, -207.721, -139.473, -206.214, -91.2382, -167.023, -71.6428, -153.457, -38.4813, -162.501, -5.31976, -177.574, 21.8124, -201.692, 53.4665, -189.633, 100.194, -159.486, 136.37, -145.92, 169.532, -114.266, 199.679, -78.0897, 244.899, -20.8108, 273.538, 31.9461, 275.046, 65.1076, 269.016, 101.284, 204.201, 116.357, 143.907, 125.401, 125.819, 146.504, 122.804, 175.144, 103.209, 194.739, 73.062, 202.276, 15.783, 211.32, -52.0473, 209.812, -101.79, 196.246, -124.4, 184.188, -140.98, 164.592, -183.186, 141.982 )
-[connection signal="body_entered" from="object2" to="object2" method="_on_object2_body_entered"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="object2"]
+polygon = PoolVector2Array( -268.017, 404.6, -266.85, 101.349, -180.541, 102.515, -175.875, -101.596, -270.349, -100.43, -270.765, -404.495, -46.0889, -402.039, -46.0889, -349.247, 30.0308, -349.247, 31.2583, -405.723, 257.162, -404.495, 255.934, -102.472, 144.21, -104.927, 145.438, -12.8467, 173.676, -12.8467, 177.359, 4.34131, 173.676, 17.8467, 142.982, 20.3018, 145.438, 102.561, 255.934, 102.561, 257.917, 405.917 )
+
+[node name="MustBeOut" type="Area2D" parent="."]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MustBeOut"]
+position = Vector2( 2329.07, 5020.4 )
+shape = SubResource( 1 )
+
+[node name="MustBeIn" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MustBeIn"]
+position = Vector2( 2313.62, 5026.15 )
+shape = SubResource( 2 )
+[connection signal="body_entered" from="MustBeOut" to="object2" method="_on_MustBeOut_body_entered"]
+[connection signal="body_exited" from="MustBeOut" to="object2" method="_on_MustBeOut_body_exited"]
+[connection signal="body_entered" from="MustBeIn" to="object2" method="_on_MustBeIn_body_entered"]
+[connection signal="body_exited" from="MustBeIn" to="object2" method="_on_MustBeIn_body_exited"]
 
 [editable path="planet"]

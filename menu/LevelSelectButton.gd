@@ -34,7 +34,18 @@ func _ready():
 #	pass
 
 
-func _on_TextureRect_pressed():
-	if unlocked:
-		saveData.current_level = level_number
-		get_tree().change_scene(level_to_go_to)
+#If PC can reuse this function again
+#func _on_TextureRect_pressed():
+#	if unlocked:
+#		saveData.current_level = level_number
+#		get_tree().change_scene(level_to_go_to)
+
+
+
+
+func _on_TextureRect_gui_input(event):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			if unlocked:
+				saveData.current_level = level_number
+				get_tree().change_scene(level_to_go_to)

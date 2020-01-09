@@ -3,62 +3,77 @@
 [ext_resource path="res://map/map_assets/dotted_line.png" type="Texture" id=1]
 [ext_resource path="res://map/gravityHandler.tscn" type="PackedScene" id=2]
 [ext_resource path="res://map/planet/planet.tscn" type="PackedScene" id=3]
-[ext_resource path="res://menu/assets/flag.png" type="Texture" id=4]
-[ext_resource path="res://map/planet/circle.png" type="Texture" id=5]
-[ext_resource path="res://menu/assets/launchTower.png" type="Texture" id=6]
+[ext_resource path="res://map/map_assets/earth.png" type="Texture" id=4]
+[ext_resource path="res://menu/assets/launchTower.png" type="Texture" id=5]
+[ext_resource path="res://menu/assets/flag.png" type="Texture" id=6]
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=7]
 
 [node name="lvl1" type="Node2D"]
 
 [node name="helperLine" type="Line2D" parent="."]
-points = PoolVector2Array( 2300.43, -817.967, 2271.47, -1157.24, 2168.12, -1571.09, 1950.76, -2065.59, 1424.19, -2442.08, 507.352, -2776.86, -794.67, -2469.88, -1271.02, -1707.72, -1569.85, -702.534, -1630.19, 303.093, -1632.3, 1046.84, -1527.3, 2140.49, -1201.81, 2840.97, -716.749, 3538.25, -64.9458, 4129.42, 647.49, 4387.11, 1390.24, 4311.32, 1875.31, 4083.95, 2254.26, 3720.15, 2349.48, 2883.55 )
+position = Vector2( 29512.2, -3697.21 )
+points = PoolVector2Array( 58.3359, 2566.94, 33.6426, 677.923, -114.516, -667.846, -460.219, -1408.64, -1126.93, -1853.11, -2583.82, -2346.97, -4169.84, -2498.02, -5455.79, -2552.74, -6946.95, -2060.25, -7740.41, -1307.83, -8055.05, -678.533 )
 texture = ExtResource( 1 )
 texture_mode = 1
 
 [node name="gravityHandler" parent="." instance=ExtResource( 2 )]
+G = 1000
 
 [node name="planet" parent="." instance=ExtResource( 3 )]
-position = Vector2( 2324.59, 1023.32 )
-mass = 10000.0
-
-[node name="Sprite2" type="Sprite" parent="planet"]
-position = Vector2( -302.213, 1879.53 )
-rotation = 3.49066
-scale = Vector2( 0.169344, 0.169344 )
-texture = ExtResource( 4 )
-
-[node name="Sprite3" type="Sprite" parent="planet"]
-position = Vector2( 365.088, 1858.05 )
-rotation = -3.49066
-scale = Vector2( 0.169344, 0.169344 )
-texture = ExtResource( 4 )
-flip_h = true
-
-[node name="EndZone" type="CollisionPolygon2D" parent="planet"]
-position = Vector2( -1608.19, -1580.1 )
-polygon = PoolVector2Array( 1333.51, 3396.64, 1389.35, 3406.67, 1445.2, 3410.96, 1522.53, 3413.83, 1604.15, 3416.69, 1697.23, 3412.39, 1770.26, 3409.53, 1869.06, 3393.78, 1943.53, 3376.59, 1906.3, 3150.34, 1357.85, 3170.39 )
-
-[node name="NoLandZone" type="CollisionPolygon2D" parent="planet"]
-position = Vector2( -1590.17, -1584.45 )
-polygon = PoolVector2Array( 1333.54, 3396.78, 1201.69, 3376.84, 1043.24, 3336.95, 872.599, 3273.79, 749.784, 3213.27, 632.179, 3151.24, 632.179, 3151.24, 532.668, 3082.74, 417.648, 2992.28, 328.476, 2913.44, 226.38, 2807.47, 134.622, 2700.2, 60.5104, 2605.65, -7.01514, 2489.02, -69.6298, 2373.61, -128.561, 2243.47, -170.914, 2126.63, -197.086, 2019.23, -228.674, 1881.15, -249.409, 1728.48, -256.268, 1557.86, -251.124, 1451.55, -229.586, 1263.82, -181.586, 1065.82, -130.586, 927.825, -43.4144, 722.905, 74.0372, 535.648, 214.757, 359.47, 398.149, 177.587, 551.37, 65.8931, 694.567, -27.1852, 817.445, -88.7327, 953.482, -148.876, 1060.88, -181.811, 1196.92, -211.882, 1374.48, -244.818, 1444.65, 57.3286, 1762.55, 34.417, 1802.84, -246.265, 1977.94, -213.59, 2142.24, -172.891, 2288.45, -115.612, 2430.14, -46.2748, 2579.37, 44.1656, 2705.98, 136.113, 2831.11, 244.057, 2941.87, 354.817, 3043.84, 474.367, 3140.53, 616.772, 3228.44, 775, 3309.31, 957.841, 3351.5, 1094.97, 3383.38, 1237.92, 3418.24, 1428.63, 3418.24, 1627.53, 3405.94, 1799.77, 3376.5, 1971.47, 3341.96, 2109.61, 3187.88, 2470.67, 3075.5, 2640.29, 2976.58, 2768.31, 2847.6, 2905.29, 2728.92, 3009.15, 2558.75, 3127.89, 2394.93, 3225, 2206.35, 3309.06, 1945.06, 3377.23, 1870.08, 2934.17, 1383.85, 3022.78 )
+position = Vector2( 21318.1, 7906.87 )
+mass = 65535.0
 
 [node name="Sprite4" type="Sprite" parent="planet"]
-scale = Vector2( 7.1669, 7.1669 )
-texture = ExtResource( 5 )
+position = Vector2( -32.3164, -34.5281 )
+scale = Vector2( 4.93827, 4.91402 )
+texture = ExtResource( 4 )
+
+[node name="EndZone" type="CollisionPolygon2D" parent="planet"]
+position = Vector2( 11056.6, -31002.4 )
+rotation = -5.71072
+scale = Vector2( 6.52039, 6.52039 )
+polygon = PoolVector2Array( 1333.51, 3396.64, 1493.16, 3433.36, 1577.24, 3086.81, 1463.9, 3064.52, 1308.72, 3045.56 )
+
+[node name="NoLandZone" type="CollisionPolygon2D" parent="planet"]
+position = Vector2( -10596.2, -10596.2 )
+scale = Vector2( 6.67646, 6.67647 )
+polygon = PoolVector2Array( 1333.54, 3396.78, 1201.69, 3376.84, 1043.24, 3336.95, 872.599, 3273.79, 749.784, 3213.27, 632.179, 3151.24, 632.179, 3151.24, 532.668, 3082.74, 417.648, 2992.28, 328.476, 2913.44, 226.38, 2807.47, 134.622, 2700.2, 60.5104, 2605.65, -7.01514, 2489.02, -69.6298, 2373.61, -128.561, 2243.47, -170.914, 2126.63, -197.086, 2019.23, -228.674, 1881.15, -249.409, 1728.48, -256.268, 1557.86, -251.124, 1451.55, -229.586, 1263.82, -181.586, 1065.82, -130.586, 927.825, -43.4144, 722.905, 74.0372, 535.648, 214.757, 359.47, 398.149, 177.587, 551.37, 65.8931, 694.567, -27.1852, 817.445, -88.7327, 953.482, -148.876, 1060.88, -181.811, 1196.92, -211.882, 1372.7, -240.976, 1482.88, -248.131, 1532.96, -66.4041, 1644.58, -63.5422, 1673.19, -248.131, 1802.84, -246.265, 1977.94, -213.59, 2142.24, -172.891, 2288.45, -115.612, 2430.14, -46.2748, 2579.37, 44.1656, 2705.98, 136.113, 2538.52, 460.029, 2653.1, 559.881, 2907.32, 310.96, 3039.72, 467.198, 3153.59, 641.971, 3228.44, 775, 3309.31, 957.841, 3351.5, 1094.97, 3383.38, 1237.92, 3418.24, 1428.63, 3418.24, 1627.53, 3405.94, 1799.77, 3376.5, 1971.47, 3341.96, 2109.61, 3187.88, 2470.67, 3075.5, 2640.29, 2976.58, 2768.31, 2847.6, 2905.29, 2728.92, 3009.15, 2558.75, 3127.89, 2394.93, 3225, 2206.35, 3309.06, 1939.43, 3388.39, 1694.4, 3427.59, 1473.88, 3427.59 )
 
 [node name="StartZone" type="CollisionPolygon2D" parent="planet"]
-position = Vector2( -51.9385, -1569.68 )
-polygon = PoolVector2Array( -156.978, -261.896, -103.792, -33.6415, 235.266, -35.8575, 268.507, -261.896, 130.003, -272.977, 18.0913, -271.869, -76.0916, -271.869 )
+position = Vector2( -197.557, -11506.7 )
+scale = Vector2( 2.72722, 2.72722 )
+polygon = PoolVector2Array( -182.39, -275.442, -114.702, -30.4764, 235.266, -35.8575, 281.754, -275.442, 132.841, -278.02, 16.1611, -277.375, -86.9824, -276.731 )
 
 [node name="Sprite" type="Sprite" parent="planet"]
-position = Vector2( -18.2344, -1908.74 )
+position = Vector2( 142.688, -12337.6 )
 scale = Vector2( 2.85611, 2.85611 )
+texture = ExtResource( 5 )
+
+[node name="Sprite2" type="Sprite" parent="planet"]
+position = Vector2( 9017.54, -8674.52 )
+rotation = -5.45764
+scale = Vector2( 0.599967, 0.647464 )
 texture = ExtResource( 6 )
 
+[node name="Sprite3" type="Sprite" parent="planet"]
+position = Vector2( 7597.59, -9998.99 )
+rotation = 0.507891
+scale = Vector2( 0.758258, 0.781791 )
+texture = ExtResource( 6 )
+flip_h = true
+
 [node name="player" parent="." instance=ExtResource( 7 )]
-position = Vector2( 2302.3, -856.531 )
-STARTING_FUEL = 1000
-LEVEL_NAME = "Around the world"
+position = Vector2( 21452.3, -4393.85 )
+CAMERA_SMOOTHING = 100
+STARTING_FUEL = 200
+STARTING_CAM_CENTER = Vector2( 25614, -3752 )
+STARTING_CAM_ZOOM = 16
+ENDPOINT_LOCATION = Vector2( 29590, -1171 )
+LEVEL_NAME = "Llamazon Prime: Same Day Delivery"
 PREDICTION_DISTANCE = 1000
+NEXT_LEVEL_STRING = "res://map/levels/lvl5.tscn"
+
+[node name="Node2D" type="Node2D" parent="."]
+position = Vector2( 29590.7, -1171.8 )
 
 [editable path="planet"]

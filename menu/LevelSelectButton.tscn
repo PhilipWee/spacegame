@@ -1,10 +1,15 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://menu/LevelSelectButton.gd" type="Script" id=1]
 [ext_resource path="res://menu/assets/levelSelectButton.png" type="Texture" id=2]
-[ext_resource path="res://menu/assets/stars_cover.png" type="Texture" id=3]
-[ext_resource path="res://menu/assets/stars_fill.png" type="Texture" id=4]
-[ext_resource path="res://menu/assets/lock.png" type="Texture" id=5]
+[ext_resource path="res://Bebas-Regular.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://menu/assets/stars_cover.png" type="Texture" id=4]
+[ext_resource path="res://menu/assets/stars_fill.png" type="Texture" id=5]
+[ext_resource path="res://menu/assets/lock.png" type="Texture" id=6]
+
+[sub_resource type="DynamicFont" id=1]
+size = 20
+font_data = ExtResource( 3 )
 
 [node name="LevelSelectButton" type="Control"]
 anchor_right = 0.065
@@ -27,6 +32,7 @@ anchor_bottom = 1.0
 margin_right = -200.0
 margin_bottom = -200.0
 rect_scale = Vector2( 4, 4 )
+custom_fonts/font = SubResource( 1 )
 text = "1"
 align = 1
 valign = 1
@@ -37,8 +43,8 @@ margin_top = 63.362
 margin_right = 860.0
 margin_bottom = 430.362
 rect_scale = Vector2( 0.05, 0.05 )
-texture_over = ExtResource( 3 )
-texture_progress = ExtResource( 4 )
+texture_over = ExtResource( 4 )
+texture_progress = ExtResource( 5 )
 
 [node name="TextureRect2" type="TextureRect" parent="."]
 margin_left = 17.9792
@@ -46,5 +52,6 @@ margin_top = 7.94429
 margin_right = 311.979
 margin_bottom = 496.944
 rect_scale = Vector2( 0.1, 0.1 )
-texture = ExtResource( 5 )
-[connection signal="pressed" from="TextureRect" to="." method="_on_TextureRect_pressed"]
+texture = ExtResource( 6 )
+[connection signal="gui_input" from="TextureRect" to="." method="_on_TextureRect_gui_input"]
+[connection signal="gui_input" from="TextureRect/level_number" to="." method="_on_level_number_gui_input"]
