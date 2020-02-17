@@ -1,0 +1,1 @@
+adb install -r D:\Documents\neonauts\neonauts.apk

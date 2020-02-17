@@ -12,6 +12,6 @@ func calculate_center(rect: Rect2) -> Vector2:
 		rect.position.y + rect.size.y / 2)
 
 #Use this to debug the show level camera
-func _draw() -> void:
-	draw_rect($player.camera_rect, Color("#ffffff"), false)
-	draw_circle(calculate_center($player.camera_rect), 5, Color("#ffffff"))
+#func _draw() -> void:
+#	draw_rect($player.camera_rect, Color("#ffffff"), false)
+#	draw_circle(calculate_center($player.camera_rect), 5, Color("#ffffff"))

@@ -2,8 +2,8 @@
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/player_assets/spaceshuttle.png" type="Texture" id=2]
-[ext_resource path="res://menu/assets/restartButton.png" type="Texture" id=3]
-[ext_resource path="res://menu/assets/menu.png" type="Texture" id=4]
+[ext_resource path="res://player/player_assets/restart_icon.png" type="Texture" id=3]
+[ext_resource path="res://player/player_assets/menu_icon.png" type="Texture" id=4]
 [ext_resource path="res://Joystick/Joystick.tscn" type="PackedScene" id=5]
 [ext_resource path="res://player/ui/bg.png" type="Texture" id=6]
 [ext_resource path="res://player/ui/fill.png" type="Texture" id=7]
@@ -12,7 +12,7 @@
 [ext_resource path="res://Bebas-Regular.ttf" type="DynamicFontData" id=10]
 [ext_resource path="res://player/player_assets/speed_arrow.png" type="Texture" id=11]
 [ext_resource path="res://player/speedText.gd" type="Script" id=12]
-[ext_resource path="res://player/player_assets/eye_icon.png" type="Texture" id=13]
+[ext_resource path="res://player/player_assets/zoom_icon.png" type="Texture" id=13]
 [ext_resource path="res://player/player_assets/flame.svg" type="Texture" id=14]
 
 [sub_resource type="SpriteFrames" id=1]
@@ -61,11 +61,16 @@ margin_right = -984.0
 margin_bottom = 40.0
 
 [node name="restartButton" type="TouchScreenButton" parent="UI/MarginContainer2"]
-position = Vector2( 849.115, -1.43139 )
+modulate = Color( 1, 1, 1, 0.705882 )
+light_mask = 3
+position = Vector2( 674.517, 19.3965 )
+scale = Vector2( 0.280666, 0.280666 )
 normal = ExtResource( 3 )
 
 [node name="menuButton" type="TouchScreenButton" parent="UI/MarginContainer2"]
-position = Vector2( 915.8, -1.89999 )
+modulate = Color( 1, 1, 1, 0.705882 )
+position = Vector2( 839.762, 17.8306 )
+scale = Vector2( 0.53635, 0.714565 )
 normal = ExtResource( 4 )
 
 [node name="JoystickMove" parent="UI" instance=ExtResource( 5 )]
@@ -73,12 +78,13 @@ anchor_top = 0.535
 anchor_right = 0.303
 anchor_bottom = 1.0
 margin_left = 45.0
-margin_top = -3.05176e-005
+margin_top = -1.85068
 margin_right = -0.272003
-margin_bottom = 0.0
+margin_bottom = -1.85065
 joystick_mode = 1
 
 [node name="fuelBar" type="TextureProgress" parent="UI"]
+self_modulate = Color( 1, 1, 1, 0.584314 )
 anchor_left = 0.522
 anchor_top = 0.895
 anchor_right = 0.522
@@ -138,11 +144,10 @@ rect_pivot_offset = Vector2( 22.76, 0 )
 texture = ExtResource( 8 )
 
 [node name="playerMarker" type="TextureRect" parent="UI"]
-margin_left = -103.003
-margin_top = -192.404
-margin_right = 300.997
-margin_bottom = 96.5961
-rect_scale = Vector2( 0.5, 0.5 )
+margin_left = -43.1463
+margin_top = -159.16
+margin_right = 352.854
+margin_bottom = 129.84
 rect_pivot_offset = Vector2( 99.83, 189.87 )
 texture = ExtResource( 9 )
 
@@ -165,6 +170,7 @@ margin_right = 2.0
 margin_bottom = 30.0
 grow_horizontal = 2
 custom_fonts/font = SubResource( 3 )
+align = 1
 
 [node name="speedMarker" type="TextureRect" parent="UI"]
 visible = false
@@ -203,7 +209,8 @@ margin_right = -984.0
 margin_bottom = -560.0
 
 [node name="ViewLevelBtn" type="TouchScreenButton" parent="UI/MarginContainer"]
-position = Vector2( 814.244, 396.289 )
+modulate = Color( 1, 1, 1, 0.619608 )
+position = Vector2( 812.393, 396.289 )
 scale = Vector2( 0.236894, 0.236894 )
 normal = ExtResource( 13 )
 

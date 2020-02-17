@@ -8,7 +8,7 @@
 font_data = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=2]
-size = 35
+size = 70
 font_data = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=3]
@@ -40,49 +40,61 @@ margin_bottom = -0.200012
 alignment = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
-margin_top = 534.0
+margin_top = 492.0
 margin_right = 926.0
 margin_bottom = 582.0
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/MarginContainer"]
 margin_right = 926.0
-margin_bottom = 48.0
+margin_bottom = 90.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer/HBoxContainer3"]
-margin_right = 172.0
-margin_bottom = 48.0
+margin_right = 327.0
+margin_bottom = 90.0
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer/HBoxContainer3/HBoxContainer"]
-margin_right = 172.0
-margin_bottom = 48.0
+margin_right = 327.0
+margin_bottom = 90.0
 
 [node name="Button" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer3/HBoxContainer/MarginContainer"]
 visible = false
-margin_right = 172.0
-margin_bottom = 48.0
+margin_right = 327.0
+margin_bottom = 90.0
 custom_fonts/font = SubResource( 1 )
 text = "Main Menu"
 
 [node name="Button2" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer3/HBoxContainer/MarginContainer"]
 visible = false
-margin_right = 172.0
-margin_bottom = 48.0
+margin_right = 327.0
+margin_bottom = 90.0
 text = "Equipment"
 
 [node name="levelSelectOld" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer3/HBoxContainer/MarginContainer"]
-margin_right = 172.0
-margin_bottom = 48.0
+margin_right = 327.0
+margin_bottom = 90.0
 custom_fonts/font = SubResource( 2 )
 text = "Level Select"
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer"]
 visible = false
 margin_right = 926.0
-margin_bottom = 48.0
+margin_bottom = 90.0
 
 [node name="Button4" type="Button" parent="VBoxContainer/MarginContainer/MarginContainer"]
 margin_right = 926.0
-margin_bottom = 48.0
+margin_bottom = 90.0
 custom_fonts/font = SubResource( 3 )
 text = "Start Mission"
+
+[node name="debugtext" type="Label" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -63.0544
+margin_top = -29.8328
+margin_right = -23.0544
+margin_bottom = -15.8328
+grow_horizontal = 0
+align = 2
 [connection signal="gui_input" from="VBoxContainer/MarginContainer/HBoxContainer3/HBoxContainer/MarginContainer/levelSelectOld" to="." method="_on_levelSelectOld_gui_input"]

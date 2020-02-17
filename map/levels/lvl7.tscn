@@ -1,13 +1,16 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://map/gravityHandler.tscn" type="PackedScene" id=1]
 [ext_resource path="res://map/planet/planet.tscn" type="PackedScene" id=2]
 [ext_resource path="res://map/map_assets/moon.png" type="Texture" id=3]
-[ext_resource path="res://menu/assets/launchTower.png" type="Texture" id=4]
-[ext_resource path="res://menu/assets/flag.png" type="Texture" id=5]
+[ext_resource path="res://menu/assets/flag.png" type="Texture" id=4]
+[ext_resource path="res://map/map_assets/tree.png" type="Texture" id=5]
 [ext_resource path="res://map/map_assets/earth.png" type="Texture" id=6]
-[ext_resource path="res://map/map_assets/christmas_tree.png" type="Texture" id=7]
-[ext_resource path="res://player/player.tscn" type="PackedScene" id=8]
+[ext_resource path="res://player/player.tscn" type="PackedScene" id=7]
+[ext_resource path="res://player/player_assets/starsbackground.png" type="Texture" id=8]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 10101.7, 8548.64 )
 
 [node name="lvl1" type="Node2D"]
 
@@ -30,11 +33,6 @@ texture = ExtResource( 3 )
 position = Vector2( -51.9385, -1569.68 )
 polygon = PoolVector2Array( -156.978, -261.896, -103.792, -33.6415, 235.266, -35.8575, 268.507, -261.896, 130.003, -272.977, 18.0913, -271.869, -76.0916, -271.869 )
 
-[node name="Sprite" type="Sprite" parent="planet"]
-position = Vector2( -18.2344, -1908.74 )
-scale = Vector2( 2.85611, 2.85611 )
-texture = ExtResource( 4 )
-
 [node name="planet2" parent="." instance=ExtResource( 2 )]
 position = Vector2( 17324.6, 1023.32 )
 rotation = 3.14159
@@ -44,13 +42,13 @@ mass = 10000.0
 position = Vector2( -302.213, 1879.53 )
 rotation = 3.49066
 scale = Vector2( 0.169344, 0.169344 )
-texture = ExtResource( 5 )
+texture = ExtResource( 4 )
 
 [node name="Sprite3" type="Sprite" parent="planet2"]
 position = Vector2( 365.088, 1858.05 )
 rotation = -3.49066
 scale = Vector2( 0.169344, 0.169344 )
-texture = ExtResource( 5 )
+texture = ExtResource( 4 )
 flip_h = true
 
 [node name="EndZone" type="CollisionPolygon2D" parent="planet2"]
@@ -73,43 +71,32 @@ mass = 30000.0
 [node name="NoLandZone" type="CollisionPolygon2D" parent="planet3"]
 position = Vector2( -3573.71, -3598.99 )
 scale = Vector2( 2.26471, 2.26471 )
-polygon = PoolVector2Array( 1043.24, 3336.95, 872.599, 3273.79, 749.784, 3213.27, 632.179, 3151.24, 632.179, 3151.24, 532.668, 3082.74, 417.648, 2992.28, 328.476, 2913.44, 226.38, 2807.47, 134.622, 2700.2, 60.5104, 2605.65, -7.01514, 2489.02, -69.6298, 2373.61, -128.561, 2243.47, -170.914, 2126.63, -197.086, 2019.23, -228.674, 1881.15, -249.409, 1728.48, -256.268, 1557.86, -251.124, 1451.55, -229.586, 1263.82, -181.586, 1065.82, -130.586, 927.825, -43.4144, 722.905, 74.0372, 535.648, 214.757, 359.47, 398.149, 177.587, 551.37, 65.8931, 694.567, -27.1852, 817.445, -88.7327, 953.482, -148.876, 1060.88, -181.811, 1196.92, -211.882, 1374.48, -244.818, 1473.95, -248.258, 1575.62, -252.554, 1713.09, -251.122, 1802.84, -246.265, 1977.94, -213.59, 2142.24, -172.891, 2288.45, -115.612, 2430.14, -46.2748, 2579.37, 44.1656, 2705.98, 136.113, 2831.11, 244.057, 2941.87, 354.817, 3043.84, 474.367, 3140.53, 616.772, 3228.44, 775, 3309.31, 957.841, 3351.5, 1094.97, 3383.38, 1237.92, 3418.24, 1428.63, 3418.24, 1627.53, 3405.94, 1799.77, 3376.5, 1971.47, 3341.96, 2109.61, 3187.88, 2470.67, 3075.5, 2640.29, 2976.58, 2768.31, 2847.6, 2905.29, 2728.92, 3009.15, 2558.75, 3127.89, 2394.93, 3225, 2206.35, 3309.06, 1947.52, 3385.77, 1898.83, 4901.82, 1127.89, 4873.86, 1063.97, 3539.7 )
+polygon = PoolVector2Array( 1046.66, 3349.41, 872.599, 3273.79, 749.784, 3213.27, 632.179, 3151.24, 632.179, 3151.24, 532.668, 3082.74, 417.648, 2992.28, 328.476, 2913.44, 226.38, 2807.47, 134.622, 2700.2, 60.5104, 2605.65, -7.01514, 2489.02, -69.6298, 2373.61, -128.561, 2243.47, -170.914, 2126.63, -197.086, 2019.23, -228.674, 1881.15, -249.409, 1728.48, -256.268, 1557.86, -251.124, 1451.55, -229.586, 1263.82, -181.586, 1065.82, -130.586, 927.825, -43.4144, 722.905, 74.0372, 535.648, 214.757, 359.47, 398.149, 177.587, 551.37, 65.8931, 694.567, -27.1852, 817.445, -88.7327, 953.482, -148.876, 1060.88, -181.811, 1196.92, -211.882, 1374.48, -244.818, 1473.95, -248.258, 1575.62, -252.554, 1713.09, -251.122, 1802.84, -246.265, 1977.94, -213.59, 2142.24, -172.891, 2288.45, -115.612, 2430.14, -46.2748, 2579.37, 44.1656, 2705.98, 136.113, 2831.11, 244.057, 2941.87, 354.817, 3043.84, 474.367, 3140.53, 616.772, 3228.44, 775, 3309.31, 957.841, 3351.5, 1094.97, 3383.38, 1237.92, 3418.24, 1428.63, 3418.24, 1627.53, 3405.94, 1799.77, 3376.5, 1971.47, 3341.96, 2109.61, 3187.88, 2470.67, 3075.5, 2640.29, 2976.58, 2768.31, 2847.6, 2905.29, 2728.92, 3009.15, 2558.75, 3127.89, 2394.93, 3225, 2211.42, 3321.74, 1955.74, 3397.33, 1830.13, 3415.11, 1831.24, 3568.52, 1921.28, 3557.4, 1953.64, 3632.55, 1999.23, 3714.13, 2023.23, 3918.08, 1965.64, 3963.67, 2020.83, 4150.83, 1987.24, 4141.23, 1939.25, 4150.83, 1992.03, 4234.81, 2006.43, 4292.39, 1958.44, 4325.98, 2018.43, 4438.76, 2011.23, 4496.34, 1984.83, 4498.74, 2004.03, 4551.53, 1994.43, 4587.52, 1951.24, 4580.32, 1980.04, 4661.91, 1946.44, 4671.5, 1960.84, 4762.68, 1929.65, 4781.88, 1924.85, 4837.06, 1900.85, 4899.45, 1759.29, 4635.51, 1744.89, 4525.14, 1675.31, 4534.73, 1670.51, 4616.32, 1644.11, 4707.49, 1615.32, 4798.67, 1555.33, 4906.65, 1533.74, 4904.25, 1502.55, 4810.67, 1461.76, 4769.88, 1478.55, 4693.1, 1444.96, 4693.1, 1468.96, 4621.11, 1430.56, 4625.91, 1418.57, 4534.73, 1370.58, 4510.74, 1368.18, 4594.72, 1327.39, 4611.52, 1341.79, 4683.5, 1298.6, 4688.3, 1300.99, 4777.08, 1265, 4810.67, 1224.21, 4889.85, 1190.62, 4861.06, 1183.42, 4791.47, 1157.03, 4774.68, 1106.64, 4589.92, 1087.45, 3930.07, 1183.43, 3383 )
+
+[node name="Sprite" type="Sprite" parent="planet3"]
+position = Vector2( 610.629, 5791.56 )
+rotation = 3.07178
+scale = Vector2( 1.06372, 1.6933 )
+texture = ExtResource( 5 )
+
+[node name="Sprite2" type="Sprite" parent="planet3"]
+position = Vector2( -69.4629, 5835.91 )
+rotation = 3.14159
+scale = Vector2( 1.06372, 1.6933 )
+texture = ExtResource( 5 )
+
+[node name="Sprite3" type="Sprite" parent="planet3"]
+position = Vector2( -698.008, 5783.57 )
+rotation = 3.21141
+scale = Vector2( 1.06372, 1.6933 )
+texture = ExtResource( 5 )
 
 [node name="Sprite4" type="Sprite" parent="planet3"]
+rotation = 1.15192
 scale = Vector2( 1.67773, 1.67773 )
 texture = ExtResource( 6 )
 
-[node name="Sprite" type="Sprite" parent="planet3"]
-position = Vector2( 685.419, 5813.97 )
-rotation = 3.14159
-scale = Vector2( 1.63, 4.16 )
-texture = ExtResource( 7 )
-
-[node name="Sprite2" type="Sprite" parent="planet3"]
-position = Vector2( 247.552, 5842.33 )
-rotation = 3.14159
-scale = Vector2( 1.63, 4.16 )
-texture = ExtResource( 7 )
-
-[node name="Sprite3" type="Sprite" parent="planet3"]
-position = Vector2( -177.131, 5824.75 )
-rotation = 3.14159
-scale = Vector2( 1.63, 4.16 )
-texture = ExtResource( 7 )
-
-[node name="Sprite5" type="Sprite" parent="planet3"]
-position = Vector2( -648.369, 5797.59 )
-rotation = 3.14159
-scale = Vector2( 1.63, 4.16 )
-texture = ExtResource( 7 )
-
-[node name="Sprite6" type="Sprite" parent="planet3"]
-position = Vector2( -942.611, 5738.11 )
-rotation = 3.14159
-scale = Vector2( 1.63, 4.16 )
-texture = ExtResource( 7 )
-
-[node name="player" parent="." instance=ExtResource( 8 )]
+[node name="player" parent="." instance=ExtResource( 7 )]
 position = Vector2( 2302.3, -856.531 )
 STARTING_FUEL = 1200
 STARTING_CAM_CENTER = Vector2( 9867.3, 1033.5 )
@@ -120,5 +107,29 @@ LEVEL_TEXT_FADE_TIME = 2
 PREDICTION_DISTANCE = 1000
 NEXT_LEVEL_STRING = "res://map/levels/lvl8.tscn"
 MAX_DISTANCE_FROM_ENDPOINT = 1000000
+STAR_3_FUEL = 310.0
+STAR_2_FUEL = 578.0
+CURRENT_LEVEL = 7
+ADDITIONAL_CAMERA_VIEWS = [ Vector2( 9993.11, 6031.33 ), Vector2( 9901.72, -5735.74 ) ]
+SHOW_ADS_AFTER_WIN = true
+
+[node name="Node2D" type="Node2D" parent="."]
+position = Vector2( 9901.72, -5735.74 )
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2( 72500, 80000 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
+scale = Vector2( 50, 50 )
+texture = ExtResource( 8 )
+centered = false
+
+[node name="playArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="playArea"]
+position = Vector2( 10167.7, 1987.84 )
+shape = SubResource( 1 )
 
 [editable path="planet"]

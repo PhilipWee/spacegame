@@ -1,15 +1,16 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://map/map_assets/dotted_line.png" type="Texture" id=1]
 [ext_resource path="res://map/gravityHandler.tscn" type="PackedScene" id=2]
 [ext_resource path="res://map/planet/planet.tscn" type="PackedScene" id=3]
-[ext_resource path="res://map/map_assets/earth.png" type="Texture" id=4]
-[ext_resource path="res://menu/assets/launchTower.png" type="Texture" id=5]
+[ext_resource path="res://map/levels/curved_takeoff.png" type="Texture" id=4]
+[ext_resource path="res://map/map_assets/earth.png" type="Texture" id=5]
 [ext_resource path="res://menu/assets/flag.png" type="Texture" id=6]
 [ext_resource path="res://map/map_assets/moon.png" type="Texture" id=7]
 [ext_resource path="res://map/map_assets/slow_sign.png" type="Texture" id=8]
-[ext_resource path="res://map/planet/circle.png" type="Texture" id=9]
+[ext_resource path="res://map/map_assets/mars.png" type="Texture" id=9]
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=10]
+[ext_resource path="res://player/player_assets/starsbackground.png" type="Texture" id=11]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 20980.4, 7293.63 )
@@ -21,10 +22,12 @@ radius = 258.339
 
 [node name="helperLine" type="Line2D" parent="."]
 points = PoolVector2Array( 2300.43, -817.967, 2454.43, -942.36, 2552.06, -981.413, 2649.69, -1003.73, 31841.5, -988.743, 32004.5, -983.309, 32151.2, -945.271, 32276.3, -830.359 )
+default_color = Color( 1, 1, 1, 1 )
 texture = ExtResource( 1 )
 texture_mode = 1
 
 [node name="playArea" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="playArea"]
 position = Vector2( 17499.2, 970.001 )
@@ -40,19 +43,20 @@ mass = 10000.0
 position = Vector2( -1590.17, -1584.45 )
 polygon = PoolVector2Array( 1333.54, 3396.78, 1201.69, 3376.84, 1043.24, 3336.95, 872.599, 3273.79, 749.784, 3213.27, 632.179, 3151.24, 632.179, 3151.24, 532.668, 3082.74, 417.648, 2992.28, 328.476, 2913.44, 226.38, 2807.47, 134.622, 2700.2, 60.5104, 2605.65, -7.01514, 2489.02, -69.6298, 2373.61, -128.561, 2243.47, -170.914, 2126.63, -197.086, 2019.23, -228.674, 1881.15, -249.409, 1728.48, -256.268, 1557.86, -251.124, 1451.55, -229.586, 1263.82, -181.586, 1065.82, -130.586, 927.825, -43.4144, 722.905, 74.0372, 535.648, 214.757, 359.47, 398.149, 177.587, 551.37, 65.8931, 694.567, -27.1852, 817.445, -88.7327, 953.482, -148.876, 1060.88, -181.811, 1196.92, -211.882, 1374.48, -244.818, 1444.65, 57.3286, 1762.55, 34.417, 1802.84, -246.265, 1977.94, -213.59, 2142.24, -172.891, 2288.45, -115.612, 2430.14, -46.2748, 2579.37, 44.1656, 2705.98, 136.113, 2831.11, 244.057, 2941.87, 354.817, 3043.84, 474.367, 3140.53, 616.772, 3228.44, 775, 3309.31, 957.841, 3351.5, 1094.97, 3383.38, 1237.92, 3418.24, 1428.63, 3418.24, 1627.53, 3405.94, 1799.77, 3376.5, 1971.47, 3341.96, 2109.61, 3187.88, 2470.67, 3075.5, 2640.29, 2976.58, 2768.31, 2847.6, 2905.29, 2728.92, 3009.15, 2558.75, 3127.89, 2394.93, 3225, 2206.35, 3309.06, 1945.06, 3377.23, 1830.17, 3400.39, 1729.31, 3416.66, 1599.16, 3416.66, 1456.01, 3416.66 )
 
+[node name="Sprite" type="Sprite" parent="planet"]
+position = Vector2( -28.5728, -1946.22 )
+scale = Vector2( 0.316263, 0.316263 )
+texture = ExtResource( 4 )
+
 [node name="Sprite4" type="Sprite" parent="planet"]
 position = Vector2( -13.6595, -7.95225 )
+rotation = -0.785398
 scale = Vector2( 0.736754, 0.736285 )
-texture = ExtResource( 4 )
+texture = ExtResource( 5 )
 
 [node name="StartZone" type="CollisionPolygon2D" parent="planet"]
 position = Vector2( -51.9385, -1569.68 )
-polygon = PoolVector2Array( -156.978, -261.896, -103.792, -33.6415, 235.266, -35.8575, 268.507, -261.896, 130.003, -272.977, 18.0913, -271.869, -76.0916, -271.869 )
-
-[node name="Sprite" type="Sprite" parent="planet"]
-position = Vector2( -18.2344, -1908.74 )
-scale = Vector2( 2.85611, 2.85611 )
-texture = ExtResource( 5 )
+polygon = PoolVector2Array( -159.227, -256.289, -103.792, -33.6415, 235.266, -35.8575, 268.507, -261.896, 151.915, -265.248, 150.286, -277.466, 72.9075, -282.353, -8.54321, -282.353, -46.825, -279.91, -88.3647, -277.466, -87.5503, -266.063 )
 
 [node name="planet2" parent="." instance=ExtResource( 3 )]
 position = Vector2( 32324.6, 1023.32 )
@@ -90,12 +94,13 @@ scale = Vector2( 10, 10 )
 mass = 10000.0
 
 [node name="Sprite2" type="Sprite" parent="planet3"]
-position = Vector2( -122.477, 350.547 )
+position = Vector2( -103.377, 305.119 )
 rotation = -2.85536
 scale = Vector2( 0.394989, 0.394989 )
 texture = ExtResource( 8 )
 
 [node name="Sprite" type="Sprite" parent="planet3"]
+scale = Vector2( 0.358973, 0.358973 )
 texture = ExtResource( 9 )
 
 [node name="NoLandZone" type="CollisionShape2D" parent="planet3"]
@@ -112,6 +117,20 @@ LEVEL_TEXT_FADE_TIME = 2
 LEVEL_ZOOM_FADE_TIME = 1
 PREDICTION_DISTANCE = 1000
 NEXT_LEVEL_STRING = "res://map/levels/lvl4.tscn"
+STAR_3_FUEL = 564.0
+STAR_2_FUEL = 762.0
+CURRENT_LEVEL = 3
+SHOW_ADS_AFTER_WIN = true
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="player"]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="player/ParallaxBackground"]
+motion_mirroring = Vector2( 48332.9, 53333 )
+
+[node name="Sprite" type="Sprite" parent="player/ParallaxBackground/ParallaxLayer"]
+scale = Vector2( 33, 33 )
+texture = ExtResource( 11 )
+centered = false
 
 [node name="Node2D" type="Node2D" parent="."]
 position = Vector2( 32294.3, -823.907 )

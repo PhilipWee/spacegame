@@ -24,6 +24,9 @@ export var STAR_2_FUEL:float
 export var ZOOM_OFFSET:float = 2
 export var NUMBER_OF_OBJECTIVES = 0
 export var MAX_ZOOM = 3
+export var CURRENT_LEVEL = 1
+export var ADDITIONAL_CAMERA_VIEWS = []
+export var SHOW_ADS_AFTER_WIN = true
 
 enum shoot_state {STATE_UNREADY,STATE_READY}
 
@@ -37,6 +40,7 @@ onready var speed_marker = $UI/speedMarker
 onready var speed_text = $UI/speedMarker/speedText
 onready var playArea = $"../playArea"
 onready var collision_shape = $player
+onready var information_text = $UI/informationText
 
 onready var bullet_scene = preload("res://player/bullet/bullet.tscn")
 
@@ -52,6 +56,8 @@ var objectives = []
 var current_shoot_state
 var last_shoot_output
 var endpoint_node
+var endpoint_flag
+var warning_scene
 
 #Make a floatable fuelbar value
 var fuel: float
@@ -61,16 +67,26 @@ var endpoint_on_screen = true
 var joystick_enabled = true
 var level_completed = false
 var show_level_cam = false
+var show_endpoint_flag = false
 
 #For the show level camera
 var camera_rect : = Rect2()
 var viewport_rect : = Rect2()
+
+func _set_current_level():
+	saveData.current_level = CURRENT_LEVEL
+
+func set_information_text(text):
+	information_text.text = text
 
 func objective_completed(objective_number, complete = true):
 	if complete:
 		objectives[objective_number] = true
 	else:
 		objectives[objective_number] = false
+
+	
+	
 
 func _initialise_objectives():
 	for i in range(NUMBER_OF_OBJECTIVES):
@@ -93,7 +109,11 @@ func _show_speed_arrow():
 	else:
 		speed_marker.visible = false
 
+func _hide_all_ads():
+	saveData.hide_ad_banner()
+
 func _ready():
+	_hide_all_ads()
 	_initialise_fuel()
 	_initialise_camera()
 	_initialise_projectile_line()
@@ -103,6 +123,8 @@ func _ready():
 	show_level_camera()
 	start_zoom_timer()
 	_initialise_objectives()
+	_show_endpoint_flag()
+	_set_current_level()
 	
 	set_process(get_child_count() > 0)
 	
@@ -132,16 +154,24 @@ func _create_endpoint():
 	endpoint.connect("endPoint_entered_screen",self,"_on_endPoint_entered_screen")
 	endpoint.connect("endPoint_exited_screen",self,"_on_endPoint_exited_screen")
 	endpoint_node = endpoint
+	#Add the endpoint flags image as a child to the endpoint
+	var flag_texture = load("res://player/player_assets/endpoint_flags.png")
+	endpoint_flag = Sprite.new()
+	endpoint_flag.texture = flag_texture
+	endpoint.add_child(endpoint_flag)
+	endpoint_flag.visible = false
+	endpoint_flag.modulate = Color(1,1,1,0.5)
+	endpoint_flag.scale = Vector2(0.5,0.5)
 	
-func _hover_endpoint_marker():
-	#TODO: Smooth transition of endpoint marker
-	var displacement_of_end = endpoint_node.get_global_transform_with_canvas().get_origin()
-	endpoint_marker.anchor_left = 0
-	endpoint_marker.anchor_top = 0
-	endpoint_marker.rect_position = displacement_of_end
+func _show_endpoint_flag():
+	endpoint_marker.visible = false
+	endpoint_flag.visible = true
+#	endpoint_flag.scale = Vector2(cam.zoom.x,cam.zoom.y)
 	pass
 
 func _point_to_end_endpoint_marker():
+	endpoint_marker.visible = true
+	endpoint_flag.visible = false
 	endpoint_marker.anchor_left = 0.5
 	endpoint_marker.anchor_top = 0.08
 	endpoint_marker.margin_left = 0
@@ -179,6 +209,8 @@ func show_level_camera():
 	level_cam.make_current()
 	level_cam.set_enable_follow_smoothing(CAMERA_SMOOTHING)
 	camera_rect = Rect2(position, Vector2()).expand(ENDPOINT_LOCATION)
+	for additional_view in ADDITIONAL_CAMERA_VIEWS:
+		camera_rect = camera_rect.expand(additional_view)
 	level_cam.position = calculate_center(camera_rect)
 	level_cam.zoom = calculate_zoom(camera_rect,viewport_rect.size)
 	cam_following = false
@@ -213,14 +245,44 @@ func _initialise_camera():
 func _initialise_projectile_line():
 	projectile_line = Line2D.new()
 	get_parent().call_deferred("add_child",projectile_line)
+	
+func start_level_out_of_bounds_timer(time):
+	var timer = Timer.new()
+	add_child(timer)
+	timer.wait_time = time
+	timer.one_shot = true
+	timer.connect("timeout", self, "_out_of_bounds")
+	timer.start()
 
-func _check_if_out_of_bounds():
+func _out_of_bounds():
+	if is_instance_valid(warning_scene):
+		warning_scene.queue_free()
+	var out_of_bounds = false
 	if playArea and self:
 		if not playArea.overlaps_body(self):
-			die("Out of Bounds")
+			out_of_bounds = true
 	
 	elif position.distance_to(ENDPOINT_LOCATION) > MAX_DISTANCE_FROM_ENDPOINT:
-		die("Out of Bounds")
+		out_of_bounds = true
+	
+	if out_of_bounds:
+		die('Out of Bounds')
+
+func _check_if_out_of_bounds():
+	var out_of_bounds = false
+	if playArea and self:
+		if not playArea.overlaps_body(self):
+			out_of_bounds = true
+	
+	elif position.distance_to(ENDPOINT_LOCATION) > MAX_DISTANCE_FROM_ENDPOINT:
+		out_of_bounds = true
+	
+	if out_of_bounds and !is_instance_valid(warning_scene) and exists:
+		#Start the out of bounds timer
+		start_level_out_of_bounds_timer(3)
+		#Show the out of bounds warning
+		warning_scene = preload("res://player/out_of_bounds_scene/out_of_bounds.tscn").instance()
+		add_child(warning_scene)
 
 func _smooth_pan_to(pos:Vector2):
 	if cam.position != pos:
@@ -230,8 +292,9 @@ func _smooth_pan_to(pos:Vector2):
 func _handle_cam():
 	
 	#Add function to show player marker if zoomed out too far
-	if cam.zoom.x > SHOW_PLAYER_MARKER_AT_ZOOM:
-		player_marker.visible = true
+	if cam.zoom.x > SHOW_PLAYER_MARKER_AT_ZOOM or show_level_cam:
+		#Don't show the player marker for now since its too buggy
+#		player_marker.visible = true
 		var player_position_for_canvas = get_global_transform_with_canvas().get_origin()
 		player_marker.anchor_top = 0
 		player_marker.anchor_bottom = 0 
@@ -243,9 +306,10 @@ func _handle_cam():
 	if cam_following:
 		#If the endpoint is on the screen, place the direction arrow on top of it
 		if endpoint_on_screen:
-			_hover_endpoint_marker()
+			pass
 		else:
 			_point_to_end_endpoint_marker()
+			show_endpoint_flag = false
 		
 		#Transition the camera smoothly to the player
 		_smooth_pan_to(Vector2.ZERO)
@@ -253,6 +317,9 @@ func _handle_cam():
 		#Zoom to the character depending on the speed
 		zoom_level = clamp(zoom_level,1.5,MAX_ZOOM)
 		_smooth_zoom_to(zoom_level)
+	
+	if show_endpoint_flag:
+		_show_endpoint_flag()
 
 
 #----Camera Smoothing Code----
@@ -323,7 +390,6 @@ func _move():
 #If your speed is beyond a certain value on crashing, remove the player
 func _check_landing_speed(speed_before_crash):
 	if vel.length() > MAX_LANDING_SPEED:
-		_remove()
 		return "dead"
 	else:
 		vel = -speed_before_crash
@@ -337,7 +403,13 @@ func die(reason:String):
 		add_child(death_scene)
 		_remove()
 
+var won = false
+
 func _win(speed_before_landing):
+	if won:
+		return
+	else:
+		won = true
 	if MUST_LAND_SAFELY:
 		if _check_landing_speed(speed_before_landing) == "dead":
 			die("Collided too fast")
@@ -347,21 +419,30 @@ func _win(speed_before_landing):
 		for objective in objectives:
 			if objective == false:
 				return
-	#Load whether you have won or not
-	var win_scene = preload("res://player/win_scene/WinOverlay.tscn").instance()
-	win_scene.init(NEXT_LEVEL_STRING,"res://menu/menu.tscn","Fuel Used: " + String(STARTING_FUEL - fuel))
-	add_child(win_scene)
+	
 	joystick_enabled = false
 	level_completed = true
 	#Update the stars
-	if fuel > STAR_3_FUEL:
-		saveData.level_data[saveData.current_level - 1]["stars"] = 3
-	elif fuel > STAR_2_FUEL:
-		saveData.level_data[saveData.current_level - 1]["stars"] = 2
+	var fuel_used = STARTING_FUEL - fuel
+	var num_stars = 0
+	if fuel_used < STAR_3_FUEL:
+		num_stars = 3
+	elif fuel_used < STAR_2_FUEL:
+		num_stars = 2
 	else:
-		saveData.level_data[saveData.current_level - 1]["stars"] = 1
+		num_stars = 1
+	saveData.level_data[saveData.current_level - 1]["stars"] = max(num_stars,saveData.level_data[saveData.current_level - 1]["stars"])
 	#Unlock the next level
-	saveData.level_data[saveData.current_level - 1 + 1]["unlocked"] = true
+	if saveData.current_level < len(saveData.level_data):
+		saveData.level_data[saveData.current_level - 1 + 1]["unlocked"] = true
+	
+	#Load whether you have won or not
+	var win_scene = preload("res://player/win_scene/WinOverlay.tscn").instance()
+	add_child(win_scene)
+	win_scene.init(NEXT_LEVEL_STRING,"res://menu/menu.tscn",num_stars,"Fuel Used: " + String(ceil(fuel_used)),SHOW_ADS_AFTER_WIN)
+	
+	#Save the game
+	saveData.save_game(0)
 
 func _remove():
 	if exists:
@@ -426,10 +507,13 @@ func _on_menuButton_pressed():
 
 func _on_ViewLevelBtn_pressed():
 	show_level_cam = true
+	show_endpoint_flag = true
 	show_level_camera()
+	_show_endpoint_flag()
 	pass # Replace with function body.
 
 
 func _on_ViewLevelBtn_released():
 	show_level_cam = false
+	show_endpoint_flag = false
 	_zoom_to_character()

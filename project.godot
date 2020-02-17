@@ -18,6 +18,10 @@ _global_script_class_icons={
 "Joystick": ""
 }
 
+[android]
+
+modules="org/godotengine/godot/GodotAdMob"
+
 [application]
 
 config/name="NeoNauts"

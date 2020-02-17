@@ -5,7 +5,6 @@ onready var grid = $MarginContainer/GridContainer
 func _ready():
 	#TODO: Fix strange indexing bug
 	saveData.level_data[0]['unlocked'] = true
-	print(saveData.level_data)
 	for level_number in range(1,len(saveData.level_data)+1):
 		#Handle each level on the level scene
 		var single_level_data = saveData.level_data[level_number-1]
